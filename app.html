@@ -1,0 +1,742 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StockWise - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+          sans-serif;
+      }
+      .prose {
+        max-width: 100%;
+      }
+      .prose h2 {
+        margin-top: 1.5rem;
+        margin-bottom: 0.75rem;
+      }
+      .prose p {
+        margin-bottom: 0.5rem;
+      }
+      .gradient-text {
+        background: linear-gradient(to right, #2563eb, #7c3aed, #ec4899);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+      }
+      .sidebar {
+        width: 280px;
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        background: linear-gradient(180deg, #f8f9fa 0%, #f0f4ff 100%);
+        border-right: 1px solid #e0e0e0;
+        overflow-y: auto;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+      }
+      .main-content {
+        margin-left: 280px;
+        min-height: 100vh;
+        background: white;
+      }
+      .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        margin: 8px 0;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 15px;
+        color: #333;
+      }
+      .nav-item:hover {
+        background: rgba(99, 102, 241, 0.1);
+        color: #6366f1;
+      }
+      .nav-item.active {
+        background: linear-gradient(135deg, #6366f1 0%, #a78bfa 100%);
+        color: white;
+      }
+      .sidebar-section {
+        margin: 20px 0;
+        border-top: 1px solid #e0e0e0;
+        padding-top: 20px;
+      }
+      .demo-balance {
+        background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        color: white;
+        padding: 16px;
+        border-radius: 12px;
+        text-align: center;
+      }
+      .user-profile {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        border-radius: 12px;
+        background: white;
+      }
+      .user-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #a78bfa 0%, #ec4899 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 20px;
+      }
+      .top-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 30px;
+        background: white;
+        border-bottom: 1px solid #f0f0f0;
+      }
+      @media (max-width: 768px) {
+        .sidebar {
+          width: 0;
+          left: -280px;
+        }
+        .main-content {
+          margin-left: 0;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-white">
+    <div id="app" class="flex">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <!-- Logo -->
+        <div class="mb-8">
+          <div class="text-2xl font-bold gradient-text mb-2">StockMaster</div>
+          <p class="text-xs text-gray-600">Learn. Trade. Grow.</p>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1">
+          <div class="nav-item active" onclick="goTo('dashboard')">
+            <i class="fas fa-chart-line"></i>
+            <span>Dashboard</span>
+          </div>
+          <div class="nav-item" onclick="goTo('learn')">
+            <i class="fas fa-book"></i>
+            <span>Learn</span>
+          </div>
+          <div class="nav-item" onclick="goTo('trading')">
+            <i class="fas fa-chart-bar"></i>
+            <span>Demo Trading</span>
+          </div>
+          <div class="nav-item" onclick="window.location.href='Ai_analysis2.html'">
+            <i class="fas fa-chart-pie"></i>
+            <span>Stock Analysis</span>
+          </div>
+          <div class="nav-item" onclick="goTo('settings')">
+            <i class="fas fa-robot"></i>
+            <span>AI Tutor</span>
+          </div>
+          <div class="nav-item" onclick="goTo('profile')">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+          </div>
+          <div class="nav-item" onclick="goTo('settings')">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+          </div>
+        </nav>
+
+        <!-- Demo Balance -->
+        <div class="sidebar-section">
+          <div class="demo-balance">
+            <div class="text-sm mb-2">💰 Demo Balance</div>
+            <div class="text-2xl font-bold">₹1,131.88</div>
+            <div class="text-xs mt-2 opacity-90">1 lessons completed</div>
+          </div>
+        </div>
+
+        <!-- User Profile -->
+        <div class="sidebar-section">
+          <div class="user-profile">
+            <div class="user-avatar" id="userInitial">D</div>
+            <div>
+              <div class="font-semibold text-gray-800 text-sm" id="userNameSidebar">Demo User</div>
+              <div class="text-xs text-gray-600" id="userEmailSidebar">user@example.com</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Language & Logout -->
+        <div class="sidebar-section">
+          <div class="nav-item" onclick="alert('Language selector')">
+            <i class="fas fa-globe"></i>
+            <span id="langLabel">English</span>
+          </div>
+          <div class="nav-item" onclick="handleLogout()">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <div class="main-content"
+
+      <!-- Dashboard Page -->
+      <div id="dashboard-page" class="page">
+        <!-- Top Header -->
+        <div class="top-header">
+          <div>
+            <h1 class="text-3xl md:text-4xl font-bold gradient-text">
+              Welcome back, <span id="userName">Demo User</span>! 👋
+            </h1>
+            <p class="text-gray-600 mt-1">Your journey to financial freedom starts here</p>
+          </div>
+          <button onclick="alert('Start learning page')" class="px-6 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 font-medium whitespace-nowrap">
+            📚 Start Learning
+          </button>
+        </div>
+
+        <!-- Page Content -->
+        <div class="p-6 md:p-10">
+            <div class="grid md:grid-cols-2 gap-6">
+              <div
+                class="p-6 bg-gradient-to-br from-blue-500 to-cyan-500 text-white rounded-lg shadow-lg"
+              >
+                <h3 class="text-2xl font-bold flex items-center gap-2">
+                  📈 NIFTY 50
+                </h3>
+                <p class="text-4xl font-bold mt-4">20,100.50</p>
+                <div class="flex items-center gap-2 mt-2 text-xl">
+                  <span>+100.50 (+0.50%)</span>
+                </div>
+                <p class="text-xs mt-2 opacity-80">
+                  Last updated: Feb 3, 2026, 4:46 PM
+                </p>
+              </div>
+
+              <div
+                class="p-6 bg-gradient-to-br from-green-500 to-emerald-500 text-white rounded-lg shadow-lg"
+              >
+                <h3 class="text-2xl font-bold flex items-center gap-2">
+                  📈 SENSEX
+                </h3>
+                <p class="text-4xl font-bold mt-4">65,200.75</p>
+                <div class="flex items-center gap-2 mt-2 text-xl">
+                  <span>-200.75 (-0.31%)</span>
+                </div>
+                <p class="text-xs mt-2 opacity-80">
+                  Last updated: Feb 3, 2026, 4:46 PM
+                </p>
+              </div>
+            </div>
+
+            <!-- Market Explanation -->
+            <div class="p-6 bg-white rounded-lg shadow-lg">
+              <h3 class="text-lg font-bold flex items-center gap-2 mb-4">
+                ✨ What's happening today?
+              </h3>
+              <p class="text-gray-700 leading-relaxed">
+                The market is showing mixed signals today. While NIFTY closed
+                with slight gains, SENSEX faced some selling pressure. This is a
+                good time to review your portfolio and focus on long-term
+                investing strategies.
+              </p>
+              <span
+                class="inline-block mt-4 px-3 py-1 bg-gray-100 text-gray-700 rounded text-sm"
+                >Market Open</span
+              >
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="grid md:grid-cols-3 gap-6">
+              <div
+                class="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow"
+              >
+                <h4 class="text-sm font-medium text-gray-600">
+                  Learning Progress
+                </h4>
+                <p class="text-3xl font-bold text-gray-900 mt-4">0</p>
+                <div
+                  class="w-full bg-gray-200 h-2 rounded mt-3"
+                  style="width: 0%"
+                ></div>
+                <p class="text-xs text-gray-500 mt-2">0% complete</p>
+              </div>
+
+              <div
+                class="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow"
+              >
+                <h4 class="text-sm font-medium text-gray-600">
+                  Demo Portfolio
+                </h4>
+                <p class="text-3xl font-bold text-gray-900 mt-4">₹20,000</p>
+                <p class="text-sm text-green-600 font-medium mt-2">
+                  +₹0 (+0.00%)
+                </p>
+              </div>
+
+              <div
+                class="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow"
+              >
+                <h4 class="text-sm font-medium text-gray-600">Achievements</h4>
+                <p class="text-3xl font-bold text-gray-900 mt-4">0</p>
+                <p class="text-sm text-gray-500 mt-2">Badges earned</p>
+              </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="grid md:grid-cols-2 gap-6">
+              <div
+                class="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-all hover:scale-105"
+              >
+                <h4 class="text-lg font-bold flex items-center gap-2">
+                  ⚡ Continue Learning
+                </h4>
+                <p class="text-gray-600 mt-4 mb-4">
+                  Pick up where you left off and master the basics of investing
+                </p>
+                <button
+                  onclick="goTo('learn')"
+                  class="w-full px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded hover:from-purple-600 hover:to-pink-600"
+                >
+                  Go to Lessons →
+                </button>
+              </div>
+
+              <div
+                class="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-all hover:scale-105"
+              >
+                <h4 class="text-lg font-bold flex items-center gap-2">
+                  📈 Practice Trading
+                </h4>
+                <p class="text-gray-600 mt-4 mb-4">
+                  Test your skills with ₹20,000 virtual money - no risk
+                  involved!
+                </p>
+                <button
+                  onclick="goTo('trading')"
+                  class="w-full px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded hover:from-green-600 hover:to-emerald-600"
+                >
+                  Start Trading →
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Learn Page -->
+      <div id="learn-page" class="page hidden">
+        <div
+          class="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 p-4 md:p-6"
+        >
+          <div class="max-w-7xl mx-auto space-y-6">
+            <div>
+              <h1
+                class="text-2xl md:text-3xl lg:text-4xl font-bold gradient-text"
+              >
+                Learn Stock Market Basics
+              </h1>
+              <p class="text-gray-600 mt-2">
+                Master investing one lesson at a time
+              </p>
+            </div>
+
+            <!-- Progress Overview -->
+            <div
+              class="p-6 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg shadow-lg"
+            >
+              <div class="flex items-center justify-between">
+                <div>
+                  <h3 class="text-lg font-semibold">Learning Journey</h3>
+                  <p class="text-sm text-white/80 mt-1">0% complete</p>
+                </div>
+                <div
+                  class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center"
+                >
+                  📚
+                </div>
+              </div>
+              <div class="w-full bg-white/30 h-3 rounded mt-4"></div>
+            </div>
+
+            <!-- Lessons Grid -->
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div
+                class="p-6 bg-white rounded-lg shadow-lg border-l-4 border-blue-500"
+              >
+                <span
+                  class="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded text-xs mb-3"
+                  >Basics</span
+                >
+                <h4 class="font-bold text-lg mb-2">
+                  Stock Market Fundamentals
+                </h4>
+                <p class="text-gray-600 text-sm mb-4">
+                  Learn the basics of how stock markets work
+                </p>
+                <div class="flex items-center gap-4 text-sm text-gray-500 mb-4">
+                  <span>⏱️ 15 min</span>
+                  <span>🎓 Beginner</span>
+                </div>
+                <button
+                  onclick="alert('Lesson: Stock Market Fundamentals')"
+                  class="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                >
+                  Start Lesson
+                </button>
+              </div>
+
+              <div
+                class="p-6 bg-white rounded-lg shadow-lg border-l-4 border-green-500"
+              >
+                <span
+                  class="inline-block px-3 py-1 bg-green-100 text-green-700 rounded text-xs mb-3"
+                  >Stocks</span
+                >
+                <h4 class="font-bold text-lg mb-2">Understanding Stocks</h4>
+                <p class="text-gray-600 text-sm mb-4">
+                  What are stocks and how to invest in them
+                </p>
+                <div class="flex items-center gap-4 text-sm text-gray-500 mb-4">
+                  <span>⏱️ 20 min</span>
+                  <span>🎓 Beginner</span>
+                </div>
+                <button
+                  class="w-full px-4 py-2 bg-gray-300 text-gray-600 rounded cursor-not-allowed"
+                >
+                  Locked
+                </button>
+              </div>
+
+              <div
+                class="p-6 bg-white rounded-lg shadow-lg border-l-4 border-purple-500"
+              >
+                <span
+                  class="inline-block px-3 py-1 bg-purple-100 text-purple-700 rounded text-xs mb-3"
+                  >Mutual Funds</span
+                >
+                <h4 class="font-bold text-lg mb-2">Mutual Funds Basics</h4>
+                <p class="text-gray-600 text-sm mb-4">
+                  An introduction to mutual fund investing
+                </p>
+                <div class="flex items-center gap-4 text-sm text-gray-500 mb-4">
+                  <span>⏱️ 25 min</span>
+                  <span>🎓 Intermediate</span>
+                </div>
+                <button
+                  class="w-full px-4 py-2 bg-gray-300 text-gray-600 rounded cursor-not-allowed"
+                >
+                  Locked
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trading Page -->
+      <div id="trading-page" class="page hidden">
+        <div
+          class="min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50 p-6"
+        >
+          <div class="max-w-7xl mx-auto">
+            <h1 class="text-3xl md:text-4xl font-bold gradient-text mb-2">
+              Demo Trading Zone
+            </h1>
+            <p class="text-gray-600 mb-6">
+              Practice with ₹20,000 virtual money - Zero risk!
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-6">
+              <div class="p-6 bg-white rounded-lg shadow-lg">
+                <h3 class="font-bold text-lg mb-4">Search Stock</h3>
+                <input
+                  type="text"
+                  placeholder="Enter stock symbol (e.g., RELIANCE, TCS)"
+                  class="w-full px-4 py-2 border rounded mb-4"
+                />
+                <button
+                  onclick="alert('Search for stock')"
+                  class="w-full px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600"
+                >
+                  Search
+                </button>
+              </div>
+
+              <div class="p-6 bg-white rounded-lg shadow-lg">
+                <h3 class="font-bold text-lg mb-4">Your Holdings</h3>
+                <p class="text-gray-500">
+                  No holdings yet. Start trading to build your portfolio!
+                </p>
+              </div>
+            </div>
+
+            <div class="mt-6 p-6 bg-white rounded-lg shadow-lg">
+              <h3 class="font-bold text-lg mb-4">Recent Trades</h3>
+              <p class="text-gray-500">No trades yet.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile Page -->
+      <div id="profile-page" class="page hidden">
+        <div
+          class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 p-4 md:p-6"
+        >
+          <div class="max-w-7xl mx-auto space-y-6">
+            <!-- Profile Header -->
+            <div
+              class="p-8 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-lg shadow-xl"
+            >
+              <div class="flex flex-col md:flex-row items-center gap-6">
+                <div
+                  class="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center text-5xl font-bold"
+                >
+                  D
+                </div>
+                <div>
+                  <h1 class="text-2xl md:text-3xl font-bold">Demo User</h1>
+                  <p class="text-white/80">user@example.com</p>
+                  <div class="flex flex-wrap gap-2 mt-4">
+                    <span
+                      class="px-3 py-1 bg-white/20 text-white rounded text-sm"
+                      >⭐ 0 Badges</span
+                    >
+                    <span
+                      class="px-3 py-1 bg-white/20 text-white rounded text-sm"
+                      >📚 0 Lessons Completed</span
+                    >
+                    <span
+                      class="px-3 py-1 bg-white/20 text-white rounded text-sm"
+                      >📈 0 Trades</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div class="p-6 bg-white rounded-lg shadow-lg">
+                <h4 class="text-sm font-medium text-gray-600">
+                  Learning Progress
+                </h4>
+                <p class="text-3xl font-bold mt-4">0%</p>
+                <div class="w-full bg-gray-200 h-2 rounded mt-3"></div>
+                <p class="text-xs text-gray-500 mt-2">0 / 0 complete</p>
+              </div>
+
+              <div class="p-6 bg-white rounded-lg shadow-lg">
+                <h4 class="text-sm font-medium text-gray-600">
+                  Avg Quiz Score
+                </h4>
+                <p class="text-3xl font-bold mt-4">0%</p>
+                <p class="text-xs text-gray-500 mt-2">0 quizzes taken</p>
+              </div>
+
+              <div class="p-6 bg-white rounded-lg shadow-lg">
+                <h4 class="text-sm font-medium text-gray-600">
+                  Demo Profit/Loss
+                </h4>
+                <p class="text-3xl font-bold text-green-600 mt-4">+₹0</p>
+                <p class="text-xs text-gray-500 mt-2">Balance: ₹20,000</p>
+              </div>
+
+              <div class="p-6 bg-white rounded-lg shadow-lg">
+                <h4 class="text-sm font-medium text-gray-600">Achievements</h4>
+                <p class="text-3xl font-bold mt-4">0</p>
+                <p class="text-xs text-gray-500 mt-2">Badges earned</p>
+              </div>
+            </div>
+
+            <!-- Badges Section -->
+            <div class="p-6 bg-white rounded-lg shadow-lg">
+              <h3 class="text-lg font-bold mb-4">🏆 Your Badges</h3>
+              <p class="text-gray-500 text-center py-8">
+                No badges yet. Keep learning to earn your first badge!
+              </p>
+            </div>
+
+            <!-- Recent Quiz Results -->
+            <div class="p-6 bg-white rounded-lg shadow-lg">
+              <h3 class="text-lg font-bold mb-4">Recent Quiz Results</h3>
+              <p class="text-gray-500 text-center py-8">
+                No quiz results yet. Complete lessons to take quizzes!
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Page -->
+      <div id="settings-page" class="page hidden">
+        <div
+          class="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 p-6"
+        >
+          <div class="max-w-7xl mx-auto">
+            <h1 class="text-3xl md:text-4xl font-bold mb-2">Settings</h1>
+            <p class="text-gray-600 mb-6">
+              Manage your account and preferences
+            </p>
+
+            <div class="grid gap-6">
+              <div class="p-6 bg-white rounded-lg shadow-lg">
+                <h3 class="text-lg font-bold mb-4">Account Information</h3>
+                <div class="space-y-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700"
+                      >Full Name</label
+                    >
+                    <input
+                      type="text"
+                      value="Demo User"
+                      class="w-full px-4 py-2 border rounded mt-1"
+                      readonly
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700"
+                      >Email Address</label
+                    >
+                    <input
+                      type="email"
+                      value="user@example.com"
+                      class="w-full px-4 py-2 border rounded mt-1"
+                      readonly
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="p-6 bg-white rounded-lg shadow-lg">
+                <h3 class="text-lg font-bold mb-4">Language Preferences</h3>
+                <p class="text-gray-600 mb-4">
+                  Choose your preferred language for the app
+                </p>
+                <select class="w-full px-4 py-2 border rounded">
+                  <option>English</option>
+                  <option>हिंदी (Hindi)</option>
+                </select>
+              </div>
+
+              <div class="p-6 bg-white rounded-lg shadow-lg">
+                <h3 class="text-lg font-bold mb-4">Privacy & Security</h3>
+                <p class="text-gray-600">
+                  Your data is securely stored and never shared with third
+                  parties.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Check if user is logged in on page load
+      window.addEventListener("load", function () {
+        const isLoggedIn = localStorage.getItem("user_logged_in");
+        const userEmail = localStorage.getItem("user_email");
+        const userName = localStorage.getItem("user_name");
+
+        if (!isLoggedIn || isLoggedIn !== "true") {
+          console.log("User not logged in, redirecting to login...");
+          window.location.href = "login.html";
+          return;
+        }
+
+        // Display user info in header and sidebar
+        if (userEmail) {
+          document.getElementById("userEmailSidebar").textContent = userEmail;
+        }
+
+        // Get user name from localStorage or email
+        const displayName = userName || (userEmail ? userEmail.split("@")[0] : "Demo User");
+        const displayNameCapital = displayName.charAt(0).toUpperCase() + displayName.slice(1);
+        
+        document.getElementById("userName").textContent = displayNameCapital;
+        document.getElementById("userNameSidebar").textContent = displayNameCapital;
+        document.getElementById("userInitial").textContent = displayNameCapital.charAt(0).toUpperCase();
+
+        console.log("User logged in as:", userEmail);
+        goTo("dashboard");
+      });
+
+      function goTo(page) {
+        console.log("Navigating to:", page);
+
+        // Hide all pages
+        document.querySelectorAll(".page").forEach((p) => {
+          p.classList.add("hidden");
+        });
+
+        // Update active nav item
+        document.querySelectorAll(".nav-item").forEach((item) => {
+          item.classList.remove("active");
+        });
+
+        // Show selected page
+        const pageId = page + "-page";
+        const pageEl = document.getElementById(pageId);
+
+        if (pageEl) {
+          pageEl.classList.remove("hidden");
+          
+          // Mark nav item as active - find the matching nav-item
+          const navItems = document.querySelectorAll(".nav-item");
+          navItems.forEach((item, index) => {
+            const text = item.textContent.trim().toLowerCase();
+            if (text.includes(page.toLowerCase())) {
+              item.classList.add("active");
+            }
+          });
+        } else {
+          console.error("Page not found:", pageId);
+        }
+
+        // Scroll to top
+        window.scrollTo(0, 0);
+      }
+
+      function handleLogout() {
+        if (confirm("Are you sure you want to logout?")) {
+          console.log("User logging out...");
+          
+          // Clear login data
+          localStorage.removeItem("user_logged_in");
+          localStorage.removeItem("user_email");
+          localStorage.removeItem("user_name");
+          localStorage.removeItem("user_is_demo");
+          localStorage.removeItem("user_remember");
+          localStorage.removeItem("user_google_id");
+          localStorage.removeItem("user_picture");
+
+          // Redirect to login
+          window.location.href = "login.html";
+        }
+      }
+
+      // Prevent default link behavior
+      document.addEventListener("click", function (e) {
+        if (e.target.tagName === "A" && e.target.getAttribute("onclick")) {
+          e.preventDefault();
+        }
+      });
+    </script>
+  </body>
+</html>

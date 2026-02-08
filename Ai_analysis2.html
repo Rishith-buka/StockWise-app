@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Analysis - StockWise</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #2563eb, #7c3aed, #ec4899);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .sidebar {
+            width: 280px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            background: linear-gradient(180deg, #f8f9fa 0%, #f0f4ff 100%);
+            border-right: 1px solid #e0e0e0;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+            background: white;
+        }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            margin: 8px 0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 15px;
+            color: #333;
+        }
+        .nav-item:hover {
+            background: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
+        }
+        .nav-item.active {
+            background: linear-gradient(135deg, #6366f1 0%, #a78bfa 100%);
+            color: white;
+        }
+        .sidebar-section {
+            margin: 20px 0;
+            border-top: 1px solid #e0e0e0;
+            padding-top: 20px;
+        }
+        .demo-balance {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: white;
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 12px;
+            background: white;
+        }
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #a78bfa 0%, #ec4899 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background: white;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .glass-panel { 
+            background: #131722; 
+            border: 1px solid #363a45; 
+            border-radius: 12px; 
+        }
+        .tradingview-widget-container { 
+            height: 500px !important; 
+            width: 100% !important; 
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 0;
+                left: -280px;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <div id="app" class="flex">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <!-- Logo -->
+            <div class="mb-8">
+                <div class="text-2xl font-bold gradient-text mb-2">StockMaster</div>
+                <p class="text-xs text-gray-600">Learn. Trade. Grow.</p>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="flex-1">
+                <div class="nav-item" onclick="window.location.href='app.html'">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </div>
+                <div class="nav-item" onclick="window.location.href='app.html'">
+                    <i class="fas fa-book"></i>
+                    <span>Learn</span>
+                </div>
+                <div class="nav-item" onclick="window.location.href='app.html'">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Demo Trading</span>
+                </div>
+                <div class="nav-item active" onclick="window.location.href='Ai_analysis2.html'">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Stock Analysis</span>
+                </div>
+                <div class="nav-item" onclick="window.location.href='app.html'">
+                    <i class="fas fa-robot"></i>
+                    <span>AI Tutor</span>
+                </div>
+                <div class="nav-item" onclick="window.location.href='app.html'">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </div>
+                <div class="nav-item" onclick="window.location.href='app.html'">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </div>
+            </nav>
+
+            <!-- Demo Balance -->
+            <div class="sidebar-section">
+                <div class="demo-balance">
+                    <div class="text-sm mb-2">💰 Demo Balance</div>
+                    <div class="text-2xl font-bold">₹1,131.88</div>
+                    <div class="text-xs mt-2 opacity-90">1 lessons completed</div>
+                </div>
+            </div>
+
+            <!-- User Profile -->
+            <div class="sidebar-section">
+                <div class="user-profile">
+                    <div class="user-avatar" id="userInitial">D</div>
+                    <div>
+                        <div class="font-semibold text-gray-800 text-sm" id="userNameSidebar">Demo User</div>
+                        <div class="text-xs text-gray-600" id="userEmailSidebar">user@example.com</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Language & Logout -->
+            <div class="sidebar-section">
+                <div class="nav-item" onclick="alert('Language selector')">
+                    <i class="fas fa-globe"></i>
+                    <span id="langLabel">English</span>
+                </div>
+                <div class="nav-item" onclick="handleLogout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Header -->
+            <div class="top-header">
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-bold gradient-text">
+                        Stock Analysis
+                    </h1>
+                    <p class="text-gray-600 mt-1">AI-powered trading insights and analysis</p>
+                </div>
+            </div>
+
+            <!-- Stock Analysis Content -->
+            <div class="p-4 md:p-6">
+                <nav class="border-b border-gray-200 mb-6">
+                    <div class="max-w-7xl mx-auto flex justify-between items-center">
+                        <div class="relative w-full md:w-1/2">
+                            <input type="text" id="stockSearch" placeholder="Search Trade (e.g., TCS, NVDA, RELIANCE)" 
+                                class="w-full bg-white border border-gray-300 rounded-full px-5 py-2 focus:outline-none focus:border-blue-500 transition">
+                            <button onclick="updateAnalysis()" class="absolute right-2 top-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded-full text-sm mt-0.5">
+                                Analyze
+                            </button>
+                        </div>
+                    </div>
+                </nav>
+
+                <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-6">
+                    
+                    <div class="lg:col-span-3 glass-panel overflow-hidden">
+                        <div id="chart_container" class="w-full h-full">
+                            <div id="tradingview_widget"></div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-1 space-y-6">
+                        <div class="glass-panel p-5">
+                            <h3 class="text-white font-bold mb-4 flex items-center">
+                                <span class="mr-2">🤖</span> AI Sentiment
+                            </h3>
+                            <div id="aiResponse" class="space-y-4">
+                                <p class="text-sm text-gray-400 italic">Enter a trade name to begin AI processing...</p>
+                            </div>
+                        </div>
+
+                        <div class="glass-panel p-5">
+                            <h3 class="text-emerald-400 font-bold mb-2 text-sm uppercase">Quick Checklist</h3>
+                            <ul class="text-xs space-y-3 text-gray-400">
+                                <li class="flex justify-between"><span>Volatility:</span> <span class="text-white">Moderate</span></li>
+                                <li class="flex justify-between"><span>RSI (14):</span> <span class="text-white">58.4 (Neutral)</span></li>
+                                <li class="flex justify-between"><span>Volume:</span> <span class="text-emerald-500">High</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <script>
+        // Check if user is logged in on page load
+        window.addEventListener("load", function () {
+            const isLoggedIn = localStorage.getItem("user_logged_in");
+            const userEmail = localStorage.getItem("user_email");
+            const userName = localStorage.getItem("user_name");
+
+            if (!isLoggedIn || isLoggedIn !== "true") {
+                console.log("User not logged in, redirecting to login...");
+                window.location.href = "login.html";
+                return;
+            }
+
+            // Display user info in sidebar
+            if (userEmail) {
+                document.getElementById("userEmailSidebar").textContent = userEmail;
+            }
+
+            // Get user name from localStorage or email
+            const displayName = userName || (userEmail ? userEmail.split("@")[0] : "Demo User");
+            const displayNameCapital = displayName.charAt(0).toUpperCase() + displayName.slice(1);
+            
+            document.getElementById("userNameSidebar").textContent = displayNameCapital;
+            document.getElementById("userInitial").textContent = displayNameCapital.charAt(0).toUpperCase();
+
+            console.log("User logged in as:", userEmail);
+            loadWidget("NSE:TCS");
+        });
+
+        // Default Widget Initialization
+        function loadWidget(symbol = "TCS") {
+            new TradingView.widget({
+                "autosize": true,
+                "symbol": symbol,
+                "interval": "D",
+                "timezone": "Etc/UTC",
+                "theme": "dark",
+                "style": "1",
+                "locale": "en",
+                "toolbar_bg": "#f1f3f6",
+                "enable_publishing": false,
+                "hide_side_toolbar": false,
+                "allow_symbol_change": true,
+                "container_id": "tradingview_widget"
+            });
+        }
+
+        function updateAnalysis() {
+            let ticker = document.getElementById('stockSearch').value.toUpperCase();
+            if (!ticker) return;
+
+            // Handle Indian stocks suffixing (e.g., TCS -> NSE:TCS)
+            const indianStocks = ["TCS", "RELIANCE", "INFY", "HDFCBANK", "ICICIBANK"];
+            let displayTicker = indianStocks.includes(ticker) ? `NSE:${ticker}` : ticker;
+
+            // Reload Chart
+            loadWidget(displayTicker);
+
+            // Simulate AI Logic
+            const aiBox = document.getElementById('aiResponse');
+            aiBox.innerHTML = `
+                <div class="animate-pulse flex space-y-4 flex-col">
+                    <div class="h-2 bg-slate-700 rounded"></div>
+                    <div class="h-2 bg-slate-700 rounded w-5/6"></div>
+                </div>
+            `;
+
+            setTimeout(() => {
+                const score = Math.floor(Math.random() * 40) + 60; // Mock score
+                aiBox.innerHTML = `
+                    <div class="text-2xl font-bold ${score > 75 ? 'text-emerald-400' : 'text-yellow-400'}">${score}/100</div>
+                    <p class="text-sm leading-relaxed">
+                        My analysis of <strong>${ticker}</strong> indicates a ${score > 75 ? 'Strong Bullish' : 'Neutral'} trend. 
+                        Moving Averages show support at current levels with a breakout expected in the next 3 sessions.
+                    </p>
+                    <button class="w-full py-2 bg-gray-700 hover:bg-gray-600 rounded text-xs transition">View Full AI Report</button>
+                `;
+            }, 1200);
+        }
+
+        function handleLogout() {
+            if (confirm("Are you sure you want to logout?")) {
+                console.log("User logging out...");
+                
+                // Clear login data
+                localStorage.removeItem("user_logged_in");
+                localStorage.removeItem("user_email");
+                localStorage.removeItem("user_name");
+                localStorage.removeItem("user_is_demo");
+                localStorage.removeItem("user_remember");
+                localStorage.removeItem("user_google_id");
+                localStorage.removeItem("user_picture");
+
+                // Redirect to login
+                window.location.href = "login.html";
+            }
+        }
+    </script>
+</body>
+</html>
+
+            setTimeout(() => {
+                const score = Math.floor(Math.random() * 40) + 60; // Mock score
+                aiBox.innerHTML = `
+                    <div class="text-2xl font-bold ${score > 75 ? 'text-emerald-400' : 'text-yellow-400'}">${score}/100</div>
+                    <p class="text-sm leading-relaxed">
+                        My analysis of <strong>${ticker}</strong> indicates a ${score > 75 ? 'Strong Bullish' : 'Neutral'} trend. 
+                        Moving Averages show support at current levels with a breakout expected in the next 3 sessions.
+                    </p>
+                    <button class="w-full py-2 bg-gray-700 hover:bg-gray-600 rounded text-xs transition">View Full AI Report</button>
+                `;
+            }, 1200);
+        }
+    </script>
+</body>
+</html>
