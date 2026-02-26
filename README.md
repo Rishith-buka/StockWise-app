@@ -18,9 +18,8 @@ Whether you're new to investing or exploring market trends, Stock Wise provides 
 
 ## 🎥 **Screenshots / Demo**
 
-> *(Add your screenshots here)*
 
-![Dashboard Screenshot](./screenshots/dashboard.png)  
+![Dashboard Screenshot](./)  
 ![AI Tutor Demo](./screenshots/ai-tutor.gif)
 
 ---
